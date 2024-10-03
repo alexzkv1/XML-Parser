@@ -1,4 +1,7 @@
 <?php
+$file = './dataset.xml';
+$input = trim(file_get_contents($file));
+echo formater($input);
 
 function split($doc){
     $result = [];
@@ -43,4 +46,42 @@ function closingTag($char){
     return strlen($char) > 2 && $char[1] === '/';
 }
 
-?>;
+
+function formater($doc){
+$chars = split($doc);
+$output = '';
+$spaceLevel = 0;
+$openingTag = false;
+
+foreach( $chars as $char ){
+    $char = trim($char);
+
+    if(Tag($char)){
+        if(closingTag($char)){
+            $spaceLevel--;
+            $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+            $openingTag = false;
+        } 
+    else{
+        $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+        $spaceLevel++;
+        $openingTag = true;
+        }   
+    } 
+    else{
+        if($openingTag){
+            $output = rtrim($output, "\n");
+            $output .= $char ."\n";
+            $openingTag = false;
+        } 
+        else{
+            $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+        }
+    }
+        
+}
+
+return $output;
+}
+
+?>
