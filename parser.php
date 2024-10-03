@@ -34,4 +34,13 @@ function split($doc){
     return $result;
 }
 
+
+function Tag($char){
+    return strlen($char) > 1 && $char[0] === '<' && $char[strlen($char) - 1] === '>';
+}
+
+function closingTag($char){
+    return strlen($char) > 2 && $char[1] === '/';
+}
+
 ?>;
