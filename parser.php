@@ -52,6 +52,7 @@ $chars = split($doc);
 $output = '';
 $spaceLevel = 0;
 $openingTag = false;
+$makeSpace = false;
 
 foreach( $chars as $char ){
     $char = trim($char);
@@ -59,10 +60,15 @@ foreach( $chars as $char ){
     if(Tag($char)){
         if(closingTag($char)){
             $spaceLevel--;
-            $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+            if ($makeSpace) {
+                $output .= $char . "\n";
+                $makeSpace = false;
+            } else {
+                $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+            }
             $openingTag = false;
         } 
-    else{
+        else{
         $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
         $spaceLevel++;
         $openingTag = true;
@@ -71,8 +77,9 @@ foreach( $chars as $char ){
     else{
         if($openingTag){
             $output = rtrim($output, "\n");
-            $output .= $char ."\n";
+            $output .= $char;
             $openingTag = false;
+            $makeSpace = true;
         } 
         else{
             $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
