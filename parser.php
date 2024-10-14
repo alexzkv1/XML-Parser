@@ -1,8 +1,24 @@
 <?php
 
+echo 'Select a mode => 1 - File; 2 - Input: ';
+
 $handle = fopen('php://stdin', 'r');
 $input = trim(fgets($handle));
-echo 'Formated XML:' . "\n" . formater($input);
+
+
+if ($input == "1") {
+    echo 'Enter path to your file here =>: ';
+    $filePath = trim(fgets($handle));
+    $file = trim(file_get_contents($filePath));
+    $result = formater($file);
+    echo $result;
+} elseif ($input == "2") {
+    echo 'Enter unformated XML here =>: ';
+    $unformatedXml = trim(fgets($handle));
+    echo 'Formated XML:' . "\n" . formater($unformatedXml);
+} else {
+    echo 'Invalid number';
+};
 
 function split($doc){
     $result = [];
