@@ -1,12 +1,12 @@
 <?php
-$file = './dataset.xml';
-$input = trim(file_get_contents($file));
-echo formater($input);
+
+$handle = fopen('php://stdin', 'r');
+$input = trim(fgets($handle));
+echo 'Formated XML:' . "\n" . formater($input);
 
 function split($doc){
     $result = [];
     $currentToken = '';
-    $insideTag = false;
 
     for( $i = 0; $i < strlen($doc); $i++ ){
         $char = $doc[$i];
@@ -16,14 +16,14 @@ function split($doc){
                 $result[] = $currentToken;
                 $currentToken = '';
         }
-        $insideTag = true;
+
         $currentToken = '<';
         }
         elseif($char === '>'){
             $currentToken .= '>';
             $result[] = $currentToken;
             $currentToken = '';
-            $insideTag = false;
+
         }
         else{
             $currentToken .= $char;
@@ -64,12 +64,12 @@ foreach( $chars as $char ){
                 $output .= $char . "\n";
                 $makeSpace = false;
             } else {
-                $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+                $output .= str_repeat('  ', $spaceLevel) . $char . "\n";
             }
             $openingTag = false;
         } 
         else{
-        $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+        $output .= str_repeat('  ', $spaceLevel) . $char . "\n";
         $spaceLevel++;
         $openingTag = true;
         }   
@@ -82,7 +82,7 @@ foreach( $chars as $char ){
             $makeSpace = true;
         } 
         else{
-            $output .= str_repeat("  ", $spaceLevel) . $char . "\n";
+            $output .= str_repeat('  ', $spaceLevel) . $char . "\n";
         }
     }
         
